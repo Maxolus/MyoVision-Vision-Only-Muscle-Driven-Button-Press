@@ -1,0 +1,90 @@
+<mujoco model="MyoElbow_ButtonPress">
+<!--
+  Vision-Only Button-Press Environment
+  Based on MyoElbow 1DOF 6 Muscles by Vikash Kumar, Vittorio Caggiano, Huawei Wang
+  Modified: added button panel, cameras, fingertip contact geom
+-->
+
+  <!-- Include original assets, body, and scene via MyoSuite's simhive -->
+  <include file="../../../../simhive/myo_sim/elbow/assets/myoelbow_assets.xml"/>
+  <include file="../../../../simhive/myo_sim/elbow/assets/myoelbow_1dof6muscles_body.xml"/>
+  <include file="../../../../simhive/myo_sim/scene/myosuite_scene.xml"/>
+  <compiler meshdir='../../../../simhive/myo_sim/' texturedir='../../../../simhive/myo_sim/'/>
+
+  <!-- ============ BUTTON PANEL ============ -->
+  <asset>
+    <material name="btn_red" rgba="0.9 0.15 0.15 1" specular="0.5" shininess="0.5"/>
+    <material name="btn_green" rgba="0.1 0.85 0.2 1" specular="0.5" shininess="0.5"/>
+    <material name="panel_gray" rgba="0.35 0.35 0.35 1" specular="0.3"/>
+  </asset>
+
+  <worldbody>
+    <!-- Wrist target site (from original) -->
+    <site name="wrist_target" pos="0.001 0.001 0.001" size=".02" rgba="0 1 0 .2"/>
+
+    <!-- ============ BUTTON ASSEMBLY ============ -->
+    <body name="button_panel" pos="0.18 -0.15 1.15">
+      <!-- Panel base (visual only, no collision) -->
+      <geom name="panel_base" type="box" size="0.05 0.05 0.008"
+            material="panel_gray" contype="0" conaffinity="0"/>
+
+      <!-- Button: slides down when pressed, spring returns it -->
+      <body name="button" pos="0.0 0.0 0.012">
+        <joint name="btn_slide" type="slide" axis="0 0 -1"
+               range="0 0.008" damping="0.5" stiffness="40"
+               armature="0.001"/>
+        <geom name="btn_top" type="cylinder" size="0.015 0.006"
+              material="btn_red" mass="0.01"
+              contype="1" conaffinity="1" condim="3"
+              friction="1.0 0.005 0.001"/>
+        <!-- Button target site (center of button surface) -->
+        <site name="btn_target" pos="0 0 0.006" size="0.003" rgba="1 1 0 0.5"/>
+      </body>
+
+      <!-- LED indicator (changes color on press - visual only) -->
+      <geom name="btn_led" type="sphere" size="0.004"
+            pos="0.03 0.0 0.005" rgba="0.3 0.3 0.3 1"
+            contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- ============ FINGERTIP CONTACT GEOM ============
+         The original model has no explicit fingertip contact geom,
+         so we add a small sphere at the approximate wrist/hand endpoint.
+         This attaches to r_ulna_radius_hand body via a fixed site. -->
+
+    <!-- ============ CAMERAS ============ -->
+    <!-- Static third-person camera: overhead-angled view of workspace -->
+    <camera name="static_cam" mode="fixed"
+            pos="0.35 -0.45 1.55"
+            xyaxes="0.8 0.6 0 -0.2 0.3 0.93"
+            fovy="55"/>
+
+    <!-- Close-up camera focused on button area -->
+    <camera name="button_cam" mode="fixed"
+            pos="0.25 -0.35 1.35"
+            xyaxes="0.7 0.7 0 -0.2 0.2 0.96"
+            fovy="45"/>
+
+    <!-- ============ TASK LIGHTING ============ -->
+    <light name="task_light" pos="0.2 -0.2 1.8"
+           dir="0 0 -1" diffuse="0.6 0.6 0.6"
+           specular="0.2 0.2 0.2" directional="false"/>
+  </worldbody>
+
+  <!-- Original wrist-target tendon -->
+  <tendon>
+    <spatial name="error" rgba="0 1 0 0.2">
+      <site site="wrist"/>
+      <site site="wrist_target"/>
+    </spatial>
+  </tendon>
+
+  <!-- ============ SENSORS ============ -->
+  <sensor>
+    <!-- Button displacement -->
+    <jointpos name="btn_pos" joint="btn_slide"/>
+    <!-- Contact force on button (for press detection) -->
+    <touch name="btn_touch" site="btn_target"/>
+  </sensor>
+
+</mujoco>

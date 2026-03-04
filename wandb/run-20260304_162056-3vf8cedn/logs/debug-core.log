@@ -1,0 +1,8 @@
+{"time":"2026-03-04T16:20:57.2146555+01:00","level":"INFO","msg":"main: starting server","port-filename":"C:\\Users\\max-r\\AppData\\Local\\Temp\\tmpiwbqrulz\\port-16028.txt","pid":16028,"log-level":0,"disable-analytics":false,"shutdown-on-parent-exit":false,"enable-dcgm-profiling":false}
+{"time":"2026-03-04T16:20:57.2171873+01:00","level":"INFO","msg":"server: accepting connections","addr":{"IP":"127.0.0.1","Port":49756,"Zone":""}}
+{"time":"2026-03-04T16:20:57.2171873+01:00","level":"INFO","msg":"server: will exit if parent process dies","ppid":16028}
+{"time":"2026-03-04T16:20:57.2177531+01:00","level":"INFO","msg":"server: accepting connections","addr":{"Name":"C:\\Users\\max-r\\AppData\\Local\\Temp\\wandb-16028-28196-2683626807\\socket","Net":"unix"}}
+{"time":"2026-03-04T16:20:59.3531085+01:00","level":"INFO","msg":"connection: ManageConnectionData: new connection created","id":"1(127.0.0.1:49759)"}
+{"time":"2026-03-04T16:20:59.3927821+01:00","level":"INFO","msg":"handleInformInit: received","streamId":"3vf8cedn","id":"1(127.0.0.1:49759)"}
+{"time":"2026-03-04T16:21:00.3565661+01:00","level":"INFO","msg":"handleInformInit: stream started","streamId":"3vf8cedn","id":"1(127.0.0.1:49759)"}
+{"time":"2026-03-04T16:21:07.0639542+01:00","level":"INFO","msg":"connection: cancelling request","id":"1(127.0.0.1:49759)","requestId":"sqs5ksxapoyi"}

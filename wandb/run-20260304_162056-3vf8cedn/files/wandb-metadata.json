@@ -1,0 +1,44 @@
+{
+  "os":  "Windows-10-10.0.26200-SP0",
+  "python":  "CPython 3.10.19",
+  "startedAt":  "2026-03-04T15:20:56.890615Z",
+  "args":  [
+    "--n-envs",
+    "4",
+    "--total-timesteps",
+    "2000000",
+    "--xml-path",
+    "C:\\Users\\max-r\\anaconda3\\envs\\myovision\\lib\\site-packages\\myosuite\\envs\\myo\\assets\\elbow\\myoelbow_buttonpress.xml"
+  ],
+  "program":  "D:\\MyoVision\\training\\train_ppo_vision.py",
+  "codePath":  "training\\train_ppo_vision.py",
+  "codePathLocal":  "training\\train_ppo_vision.py",
+  "email":  "maxraedler01@gmail.com",
+  "root":  "D:\\MyoVision",
+  "host":  "Laptop_MR",
+  "executable":  "C:\\Users\\max-r\\anaconda3\\envs\\myovision\\python.exe",
+  "cpu_count":  16,
+  "cpu_count_logical":  24,
+  "gpu":  "NVIDIA RTX 2000 Ada Generation Laptop GPU",
+  "gpu_count":  1,
+  "disk":  {
+    "/":  {
+      "total":  "1024073920512",
+      "used":  "173450182656"
+    }
+  },
+  "memory":  {
+    "total":  "34108424192"
+  },
+  "gpu_nvidia":  [
+    {
+      "name":  "NVIDIA RTX 2000 Ada Generation Laptop GPU",
+      "memoryTotal":  "8585740288",
+      "cudaCores":  3072,
+      "architecture":  "Ada",
+      "uuid":  "GPU-840907f1-b01d-f631-1056-90ada92cb1c6"
+    }
+  ],
+  "cudaVersion":  "13.0",
+  "writerId":  "0haqqc8u7asfaxe4sot94qs1n2hj3qe5"
+}
