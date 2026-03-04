@@ -14,7 +14,7 @@ from envs.button_press_env import ButtonPressEnv
 from stable_baselines3 import PPO
 
 XML_PATH = r"C:\Users\max-r\anaconda3\envs\myovision\lib\site-packages\myosuite\envs\myo\assets\elbow\myoelbow_buttonpress.xml"
-MODEL_PATH = r"results\final_model.zip"
+MODEL_PATH = r"results\phase2_vision\best_model\best_model.zip"
 
 # --- Save video ---
 print("Recording video...")

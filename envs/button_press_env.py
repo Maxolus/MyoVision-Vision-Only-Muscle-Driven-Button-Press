@@ -79,13 +79,24 @@ class PressDetector:
         self.btn_touch_idx = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SENSOR, "btn_touch")
 
     def check(self):
-        """Returns (is_pressed: bool, displacement: float, force: float)."""
-        # Read sensors
-        disp = self.data.sensordata[self.btn_pos_idx]
-        force = self.data.sensordata[self.btn_touch_idx]
-
-        pressed = (disp > self.disp_thresh) and (force > self.force_thresh)
-        return pressed, disp, force
+        """Returns (is_pressed, min_distance, force)."""
+        btn_site_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_SITE, "btn_target")
+        btn_pos = self.data.site_xpos[btn_site_id]
+        
+        min_dist = float("inf")
+        hand_geoms = ["arm_r_2mc", "arm_r_3mc", "arm_r_1mc",
+                      "arm_r_thumbdist", "arm_r_capitate", "arm_r_hamate"]
+        
+        for name in hand_geoms:
+            gid = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_GEOM, name)
+            if gid >= 0:
+                geom_pos = self.data.geom_xpos[gid]
+                dist = np.linalg.norm(geom_pos - btn_pos)
+                if dist < min_dist:
+                    min_dist = dist
+        
+        pressed = min_dist < 0.025
+        return pressed, min_dist, 1.0 if pressed else 0.0
 
 
 # ============================================================

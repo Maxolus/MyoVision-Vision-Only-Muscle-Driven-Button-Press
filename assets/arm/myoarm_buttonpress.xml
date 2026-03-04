@@ -1,0 +1,104 @@
+<mujoco model="MyoArm_ButtonPress">
+<!--
+  Vision-Only Button-Press Environment (Full Arm)
+  Based on MyoArm by Vikash Kumar, Vittorio Caggiano
+  Modified: button panel on table, first-person camera, fingertip contacts
+-->
+
+  <!-- Include MyoArm assets and body -->
+  <include file="../../../../simhive/myo_sim/arm/assets/myoarm_assets.xml"/>
+  <include file="../../../../simhive/myo_sim/scene/myosuite_scene.xml"/>
+  <compiler meshdir='../../../../simhive/myo_sim/' texturedir='../../../../simhive/myo_sim/'/>
+
+  <asset>
+    <mesh file="../myo_sim/meshes/human_lowpoly_norighthand.stl" name="body_norighthand"/>
+    <material name="btn_red" rgba="0.9 0.15 0.15 1" specular="0.5" shininess="0.5"/>
+    <material name="panel_gray" rgba="0.35 0.35 0.35 1" specular="0.3"/>
+    <texture name="tabletop" type="2d" file="../furniture_sim/common/textures/stone1.png"/>
+    <material name="tabletop" texture="tabletop" rgba=".95 .95 .95 1"/>
+    <texture name="texwood" type="cube" file="../myo_sim/scene/floor0.png"/>
+    <material name="matwood" reflectance="0.01" texture="texwood" texuniform="false"/>
+  </asset>
+
+  <worldbody>
+    <!-- ======= Body Mesh ======= -->
+    <geom name="body" type="mesh" mesh="body_norighthand" euler="0 0 3.14" contype="0" conaffinity="0"/>
+
+    <!-- ======= MyoArm ======= -->
+    <body name="full_body" pos="-.025 0.1 1.40">
+      <include file="../../../../simhive/myo_sim/arm/assets/myoarm_body.xml"/>
+    </body>
+
+    <!-- ======= Table ======= -->
+    <body name="table" pos="0 -.5 .85">
+      <geom name="table_top" type="box" size=".8 .5 .05"
+            contype="1" conaffinity="1" material="tabletop"/>
+      <geom name="table_base" type="box" size=".35 .6 .45"
+            pos="0 0 -.45" euler="0 0 1.57"
+            contype="1" conaffinity="1" material="matwood"/>
+    </body>
+
+    <!-- ======= Button Panel (on table surface) ======= -->
+    <body name="button_panel" pos="0.0 -0.45 0.95">
+      <!-- Panel base -->
+      <geom name="panel_base" type="box" size="0.05 0.05 0.008"
+            material="panel_gray" contype="0" conaffinity="0"/>
+      <!-- Button -->
+      <body name="button" pos="0.0 0.0 0.012">
+        <joint name="btn_slide" type="slide" axis="0 0 -1"
+               range="0 0.008" damping="0.5" stiffness="40"
+               armature="0.001"/>
+        <geom name="btn_top" type="cylinder" size="0.015 0.006"
+              material="btn_red" mass="0.01"
+              contype="1" conaffinity="1" condim="3"
+              friction="1.0 0.005 0.001"/>
+        <site name="btn_target" pos="0 0 0.006" size="0.003" rgba="1 1 0 0.5"/>
+      </body>
+      <!-- LED indicator -->
+      <geom name="btn_led" type="sphere" size="0.004"
+            pos="0.03 0.0 0.005" rgba="0.3 0.3 0.3 1"
+            contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- ======= Cameras ======= -->
+    <!-- First person: from viewer calibration -->
+    <camera name="static_cam" mode="fixed"
+            pos="0.006 0.038 1.579"
+            xyaxes="-0.930 0.368 0.000 -0.262 -0.663 0.701"
+            fovy="60"/>
+
+    <!-- Wider FOV first person -->
+    <camera name="button_cam" mode="fixed"
+            pos="0.006 0.038 1.579"
+            xyaxes="-0.930 0.368 0.000 -0.262 -0.663 0.701"
+            fovy="75"/>
+
+    <!-- Task lighting -->
+    <light name="task_light" pos="0.0 -0.4 1.5"
+           dir="0 0 -1" diffuse="0.6 0.6 0.6"
+           specular="0.2 0.2 0.2" directional="false"/>
+  </worldbody>
+
+  <!-- ======= Fingertip-Button Contacts ======= -->
+  <contact>
+    <pair geom1="btn_top" geom2="thumbdist" condim="3"/>
+    <pair geom1="btn_top" geom2="2distph" condim="3"/>
+    <pair geom1="btn_top" geom2="3distph" condim="3"/>
+    <pair geom1="btn_top" geom2="4distph" condim="3"/>
+    <pair geom1="btn_top" geom2="5distph" condim="3"/>
+    <pair geom1="btn_top" geom2="2midph" condim="3"/>
+    <pair geom1="btn_top" geom2="3midph" condim="3"/>
+    <pair geom1="btn_top" geom2="2proxph" condim="3"/>
+    <pair geom1="btn_top" geom2="3proxph" condim="3"/>
+    <pair geom1="btn_top" geom2="thumbprox" condim="3"/>
+    <pair geom1="btn_top" geom2="2mc" condim="3"/>
+    <pair geom1="btn_top" geom2="3mc" condim="3"/>
+  </contact>
+
+  <!-- ======= Sensors ======= -->
+  <sensor>
+    <jointpos name="btn_pos" joint="btn_slide"/>
+    <touch name="btn_touch" site="btn_target"/>
+  </sensor>
+
+</mujoco>
